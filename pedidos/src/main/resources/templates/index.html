@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Liberação de Pedidos - ERP Senior</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        h1 { color: #333; text-align: center; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; background-color: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        button { background-color: #4CAF50; color: white; padding: 8px 16px; border: none; cursor: pointer; border-radius: 4px; }
+        button:hover { background-color: #45a049; }
+        .btn-detalhes { background-color: #2196F3; }
+        .btn-detalhes:hover { background-color: #0b7dda; }
+        .message { margin: 10px 0; padding: 10px; border-radius: 4px; text-align: center; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        @media (max-width: 600px) { table { font-size: 14px; } th, td { padding: 8px; } }
+    </style>
+</head>
+<body>
+<h1>Liberação de Pedidos - ERP Senior</h1>
+
+<div th:if="${param.success}" class="message success">Pedido liberado com sucesso!</div>
+<div th:if="${param.error}" class="message error">Erro ao liberar o pedido. Tente novamente.</div>
+
+<table>
+    <thead>
+    <tr>
+        <th>Empresa</th>
+        <th>Filial</th>
+        <th>Num. Pedido</th>
+        <th>Tipo</th>
+        <th>Situação</th>
+        <th>Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="pedido : ${pedidos}">
+        <td th:text="${pedido.codemp}"></td>
+        <td th:text="${pedido.codfil}"></td>
+        <td th:text="${pedido.numped}"></td>
+        <td th:text="${pedido.tipped}"></td>
+        <td th:text="${pedido.sitped}"></td>
+        <td>
+            <a th:href="@{/detalhes(codemp=${pedido.codemp}, codfil=${pedido.codfil}, numped=${pedido.numped})}">
+                <button type="button" class="btn-detalhes">Ver Itens</button>
+            </a>
+            <form th:id="'form-' + ${pedido.codemp} + '-' + ${pedido.codfil} + '-' + ${pedido.numped}"
+                  th:action="@{/liberar}" method="post" style="display: inline;">
+                <input type="hidden" name="codemp" th:value="${pedido.codemp}" />
+                <input type="hidden" name="codfil" th:value="${pedido.codfil}" />
+                <input type="hidden" name="numped" th:value="${pedido.numped}" />
+                <button type="button" onclick="confirmarLiberacao(this)">Liberar</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<p th:if="${#lists.isEmpty(pedidos)}" style="text-align: center; color: #666;">Nenhum pedido encontrado.</p>
+
+<script>
+    function confirmarLiberacao(botao) {
+        var form = botao.parentElement;
+        var codemp = form.querySelector('input[name="codemp"]').value;
+        var codfil = form.querySelector('input[name="codfil"]').value;
+        var numped = form.querySelector('input[name="numped"]').value;
+
+        if (confirm("Tem certeza de que deseja liberar o pedido: " + codemp + "-" + codfil + "-" + numped + "?")) {
+            form.submit();
+        }
+    }
+</script>
+</body>
+</html>

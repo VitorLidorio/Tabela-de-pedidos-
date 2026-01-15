@@ -1,0 +1,4 @@
+com\exemplo\pedidos\PedidoController.class
+com\exemplo\pedidos\PedidoWebController.class
+com\exemplo\pedidos\PedidosApplication.class
+com\exemplo\pedidos\SecurityConfig.class

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalhes do Pedido - ERP Senior</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
+        h1, h2 { color: #333; text-align: center; }
+        .info-pedido { background-color: white; padding: 15px; margin-bottom: 20px; border-radius: 4px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .info-pedido p { margin: 5px 0; }
+        .info-pedido strong { display: inline-block; width: 100px; }
+        table { border-collapse: collapse; width: 100%; background-color: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #4CAF50; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+        .voltar { display: inline-block; margin-bottom: 20px; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 4px; }
+        .voltar:hover { background-color: #45a049; }
+        .mensagem { padding: 10px; margin: 10px 0; border-radius: 4px; text-align: center; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+<a href="/" class="voltar">← Voltar para Lista de Pedidos</a>
+
+<h1>Detalhes do Pedido</h1>
+
+<div th:if="${param.success}" class="mensagem success">Pedido liberado com sucesso!</div>
+<div th:if="${param.error}" class="mensagem error">Erro ao liberar o pedido. Tente novamente.</div>
+
+<div class="info-pedido">
+    <h3>Informações do Pedido</h3>
+    <p><strong>Empresa:</strong> <span th:text="${pedido.codemp}"></span></p>
+    <p><strong>Filial:</strong> <span th:text="${pedido.codfil}"></span></p>
+    <p><strong>Num. Pedido:</strong> <span th:text="${pedido.numped}"></span></p>
+    <p><strong>Tipo:</strong> <span th:text="${pedido.tipped}"></span></p>
+    <p><strong>Situação:</strong> <span th:text="${pedido.sitped}"></span></p>
+</div>
+
+<h2>Itens do Pedido</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Seq.</th>
+        <th>Cód. Produto</th>
+        <th>Quantidade</th>
+        <th>Preço Unit.</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${itens}">
+        <td th:text="${item.seqipd}"></td>
+        <td th:text="${item.codpro}"></td>
+        <td th:text="${item.qtdped}"></td>
+        <td th:text="${item.preuni}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<p th:if="${#lists.isEmpty(itens)}" style="text-align: center; color: #666;">Nenhum item encontrado para este pedido.</p>
+</body>
+</html>
